@@ -1,0 +1,19 @@
+{% extends 'myapp/index.html' %}
+
+{% block page_title %}
+  Sign up
+{% endblock page_title %}
+
+
+{% block content %}
+  <form class="" action="{% url 'myapp:signUp' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% if form %}
+      {{ form.as_p }}
+    {% else %}
+      <h2>Something wrong with form</h2>
+    {% endif %}
+
+    <input type="submit" name="submit" value="Submit">
+  </form>
+{% endblock %}

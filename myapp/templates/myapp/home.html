@@ -1,0 +1,84 @@
+{% extends 'myapp/index.html' %}
+
+{% block page_title %}
+  Home page
+{% endblock page_title %}
+
+
+{% block content %}
+  {% load static %}
+
+
+  {% if name %}
+
+  {% else %}
+    <h1>Please Sign in..</h1>
+  {% endif %}
+
+  <div class="py-5">
+    <div class="container-fluid">
+      <div class="form-group">
+        <form class="form-inline bg-light" action="{% url 'myapp:makePost' %}" method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          {% if form %}
+            {{form}}
+            <input class="btn btn-primary btn-sm" type="submit" name="submit" value="Post">
+            <!-- <button class="btn btn-primary" type="button" name="submit">Post</button> -->
+          {% endif %}
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+  <div class="">
+    <div class="">
+      {% if postList %}
+        {% for likes, post, like, comments in postList %}
+          <div class="card" style="width: 700px;">
+            <div class="card-body">
+              <h4 class="card-title">  {{post.userid.username}}</h4>
+            </div>
+            <img class="img-thumbnail" src="{{post.image.url}}" style="height:100%; width:100%;" alt="">
+            <div class="card-body">
+              <h6 class="">{{post.title}}</h6>
+              {% if like %}
+                <a href="{% url 'myapp:likePost' post.id %}">
+                  <img src="{% static 'myapp/red.png' %}" alt="unlike">
+                </a>
+              {% else %}
+                <a href="{% url 'myapp:likePost' post.id %}">
+                  <img src="{% static 'myapp/white.png' %}" alt="like"/>
+                </a>
+              {% endif %}
+              {% if comments %}
+                {% for comment in comments %}
+                  <br>
+                  <a href="{% url 'myapp:profilePage' comment.userid.username %}">{{ comment.userid.username }}</a>
+                  {{ comment.content }}
+                {% endfor %}
+              {% endif %}
+              <br>
+              {{likes}} <a href="{% url 'myapp:likedBy' post.id %}">likes</a>
+              <form class="" action="{% url 'myapp:makeComment' post.id %}" method="post">
+                {% csrf_token %}
+                <input type="text" name="comment" value="">
+                <button type="submit" class="btn btn-link" name="submit">Comment</button>
+              </form>
+
+            </div>
+
+            <br>
+          </div>
+          <br><br>
+        {% endfor %}
+      {% endif %}
+    </div>
+
+  </div>
+
+
+{% endblock %}

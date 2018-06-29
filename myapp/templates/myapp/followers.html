@@ -1,0 +1,15 @@
+{% extends 'myapp/index.html' %}
+
+{% block content %}
+  <h3>Followers of {{ id }}</h3>
+  <ul>
+    {% for item in data %}
+    <li>
+      <img style="border-radius: 30px; width: 150px; height: 100px" src="{{item.follower.userimage.url}}" alt="">
+      <a href="{% url 'myapp:profilePage' item.follower.username %}">{{ item.follower.fname }} {{ item.follower.lname }}</a>
+    </li>
+    <br>
+    {% endfor %}
+  </ul>
+
+{% endblock %}

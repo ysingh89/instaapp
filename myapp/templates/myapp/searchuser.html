@@ -1,0 +1,21 @@
+{% extends 'myapp/index.html' %}
+
+{% block page_title %}
+  Users found
+{% endblock page_title %}
+
+{% block content %}
+  {% if users %}
+    <h4>Users found with '{{query}}'</h4>
+    {% for user in users %}
+      <!-- <img class="img-thumbnail" src="{{user.userimage.url}}" style="height:15%; width:15%;" alt=""> -->
+
+      <a href="{% url 'myapp:profilePage' user.username %}">{{user.username}}</a>
+      <br>
+    {% endfor %}
+  {% else %}
+    <h4>No users found {% if query %} with '{{query}}' {% endif %}</h4>
+  {% endif %}
+
+
+{% endblock %}

@@ -1,0 +1,96 @@
+{% extends 'myapp/index.html' %}
+
+
+{% block content %}
+  <br>
+  {% if no_user %}
+    <div class="text-center">
+      <h2>No user found with that username.</h2>
+
+    </div>
+  {% else %}
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          {% if user_info.userimage %}
+            <!-- {{userimage}} -->
+            <img class="rounded-circle" style="width: 120px; height: 100px" src="{{user_info.userimage.url}}" alt="">
+          {% endif %}
+
+          <h3>{{ user_info.fname }} {{ user_info.lname }}'s profile</h3>
+        </div>
+        <div class="col">
+          <form class="" action="{% url 'myapp:follow' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="user_id" value="{{ user_info.username }}">
+            {% if not_same_person %}
+              {% if follow %}
+                <input class="btn btn-sm" type="submit" name="submit" value="Unfollow">
+              {% else %}
+                <input class="btn btn-primary btn-sm" type="submit" name="submit" value="Follow">
+              {% endif %}
+            {% endif %}
+          </form>
+        </div>
+      </div>
+      <br>
+
+
+      <div class="row shadow p-3 mb-5 bg-white rounded">
+        <div class="col-sm">
+          <div class="row">
+            Posts
+          </div>
+          <div class="row">
+            {{ posts_count }}
+          </div>
+        </div>
+
+        <!-- Followers -->
+        <div class="col-sm">
+          <form class="" action="{% url 'myapp:followers' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="profile_id" value="{{ user_info.username }}">
+            <div class="row">
+              <button type="submit" class="btn btn-link" name="submit">Followers</button>
+            </div>
+            <div class="row">
+              {{ followers_count }}
+            </div>
+          </form>
+        </div>
+
+        <!-- Following -->
+        <div class="col-sm">
+          <form class="" action="{% url 'myapp:following' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="profile_id" value="{{ user_info.username }}">
+            <div class="row">
+              <button type="submit" class="btn btn-link" name="submit">Following</button>
+            </div>
+            <div class="">
+              {{ following_count }}
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- posts -->
+    <div class="container-fluid">
+      {% if posts %}
+        {% for post in posts %}
+          <a href="{% url 'myapp:displayImage' post.id %}">
+            <img class="img-thumbnail" style="width: 300px; height: 200px" src="{{ post.image.url }}" alt="">
+          </a>
+          <!-- <img class="img-thumbnail" style="width: 300px; height: 200px" src="{{ post.image.url }}" alt=""> -->
+
+        {% endfor %}
+      {% endif %}
+    </div>
+  {% endif %}
+
+
+
+{% endblock %}

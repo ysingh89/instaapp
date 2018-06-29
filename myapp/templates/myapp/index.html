@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{%block page_title%}{% endblock page_title%}</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+
+
+  </head>
+  <body>
+
+    {% load static %}
+    <div class="container">
+
+      <div class="p-3 mb-2 text-dark">
+
+
+        {% block page_heading %}
+
+        {% endblock page_heading %}
+        <nav class="navbar navbar-expand-lg">
+          <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+              {% if request.session.username %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'myapp:home' %}">
+                    <!-- Home -->
+                    <img src="{% static 'myapp/insta_logo.png' %}" style="height:35px;width:200px;" alt="instagram logo"/>
+                  </a>
+                </li>
+
+
+
+
+
+
+                <form class="form-inline my-2 my-lg-0" action="{% url 'myapp:searchProfile' %}" method="Post">
+                  {% csrf_token %}
+                  <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search" name="search" value="">
+                  <script>
+                    function getUsers()
+                    {
+                      var xhttp = new XMLHttpRequest();
+                      xhttp.onreadystatechange = function()
+                      {
+                        if (this.readyState == 4 && this.status == 200)
+                        {
+                          for(i of JSON.parse(this.responseText)){console.log(i.name)}
+                        }
+                      };
+                      xhttp.open("POST", "http://localhost:8000/myapp/ajaxobj", true);
+                      xhttp.send();
+                    }
+                    getUsers();
+                  </script>
+                  <button type="button" name="button" onclick="getUsers()" ></button>
+                  <!-- <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button> -->
+                </form>
+
+
+
+
+
+
+
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'myapp:profilePage' request.session.username %}">
+                    <img src="{% static 'myapp/profile.png' %}" style="height:35px;width:60px;" alt="profile logo"/>
+                  </a>
+                </li>
+              {% else %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'myapp:logIn' %}">Sign in</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'myapp:signUp' %}">Sign Up</a></li>
+              {% endif %}
+            </ul>
+            {% if request.session.username %}
+              {{ request.session.username }}
+              <a class="nav-link text-danger" href="{% url 'myapp:logOut' %}">Sign out</a>
+            {% endif %}
+          </div>
+        </nav>
+
+
+
+
+      </div>
+    </div>
+    <div class="bg-light">
+      <div class="container">
+        <div class="px-5">
+          {% block content %}
+
+          {% endblock %}
+        </div>
+      </div>
+    </div>
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+  </body>
+</html>

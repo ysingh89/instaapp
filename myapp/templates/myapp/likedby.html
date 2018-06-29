@@ -1,0 +1,26 @@
+{% extends 'myapp/index.html' %}
+
+{% block content %}
+  {% if post %}
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">  {{post.userid.username}}</h4>
+      </div>
+      <img class="img-thumbnail" src="{{post.image.url}}" alt="">
+      <br>
+      <div class="card-body">
+        <h6 class="">{{post.title}}</h6>
+        {% if usersLiked %}
+          liked by <br>
+          {% for user in usersLiked %}
+            <a href="{% url 'myapp:profilePage' user.userid.username %}">{{user.userid.username}}</a> 
+            <br>
+          {% endfor %}
+        {% endif %}
+        <br>
+      </div>
+
+        <br>
+    </div>
+  {% endif %}
+{% endblock %}
